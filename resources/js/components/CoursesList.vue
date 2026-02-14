@@ -39,10 +39,10 @@
             </td>
             <td class="actions-cell">
               <router-link :to="`/courses/${course.id}/edit`" class="btn btn-sm btn-edit">
-                ✏️ Editar
+                Editar
               </router-link>
               <button @click="deleteCourse(course.id)" class="btn btn-sm btn-delete">
-                🗑️ Eliminar
+                Eliminar
               </button>
             </td>
           </tr>

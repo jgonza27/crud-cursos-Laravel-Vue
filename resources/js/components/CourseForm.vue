@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="page-header">
-      <h1>{{ isEditing ? '✏️ Editar Curso' : '➕ Nuevo Curso' }}</h1>
+      <h1>{{ isEditing ? 'Editar Curso' : 'Nuevo Curso' }}</h1>
       <router-link to="/" class="btn btn-secondary">← Volver</router-link>
     </div>
 
