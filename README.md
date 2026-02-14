@@ -18,7 +18,7 @@ Aplicación web full stack para gestionar cursos y estudiantes.
 ### 1. Clonar el proyecto
 
 ```bash
-git clone <url-del-repositorio> crud-cursos
+git clone <https://github.com/jgonza27/crud-cursos-Laravel-Vue.git> crud-cursos
 cd crud-cursos
 ```
 
