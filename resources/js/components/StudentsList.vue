@@ -13,7 +13,6 @@
     </div>
 
     <div v-else-if="students.length === 0" class="empty-state">
-      <span class="empty-icon">📭</span>
       <p>No hay estudiantes registrados</p>
       <router-link to="/students/create" class="btn btn-primary">Registrar primer estudiante</router-link>
     </div>
