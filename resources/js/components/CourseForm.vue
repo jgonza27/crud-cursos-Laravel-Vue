@@ -31,6 +31,24 @@
         <span v-if="errors.description" class="error-text">{{ errors.description[0] }}</span>
       </div>
 
+      <div class="form-group">
+        <label for="status">Estado</label>
+        <select
+          id="status"
+          v-model="form.status"
+          class="form-control"
+          required
+        >
+          <option value="active">Activo</option>
+          <option value="draft">Borrador</option>
+          <option value="archived">Archivado</option>
+        </select>
+        <span v-if="errors.status" class="error-text">{{ errors.status[0] }}</span>
+        <div v-if="showStatusWarning" class="alert alert-warning" style="margin-top: 0.5rem;">
+          ⚠️ Al cambiar el estado a "{{ statusLabel(form.status) }}", todos los estudiantes matriculados serán desmatriculados automáticamente.
+        </div>
+      </div>
+
       <div class="form-actions">
         <button type="submit" class="btn btn-primary" :disabled="submitting">
           {{ submitting ? 'Guardando...' : (isEditing ? 'Actualizar Curso' : 'Crear Curso') }}
@@ -53,7 +71,9 @@ export default {
       form: {
         name: '',
         description: '',
+        status: 'active',
       },
+      originalStatus: 'active',
       errors: {},
       submitting: false,
       message: '',
@@ -64,6 +84,9 @@ export default {
     isEditing() {
       return !!this.$route.params.id;
     },
+    showStatusWarning() {
+      return this.isEditing && this.originalStatus === 'active' && this.form.status !== 'active';
+    },
   },
   mounted() {
     if (this.isEditing) {
@@ -71,18 +94,29 @@ export default {
     }
   },
   methods: {
+    statusLabel(status) {
+      const labels = { active: 'Activo', draft: 'Borrador', archived: 'Archivado' };
+      return labels[status] || status;
+    },
     async fetchCourse() {
       try {
         const response = await fetch(`/api/courses/${this.$route.params.id}`);
         const course = await response.json();
         this.form.name = course.name;
         this.form.description = course.description || '';
+        this.form.status = course.status || 'active';
+        this.originalStatus = course.status || 'active';
       } catch (error) {
         this.message = 'Error al cargar el curso';
         this.messageType = 'alert-error';
       }
     },
     async submitForm() {
+      if (this.showStatusWarning) {
+        if (!confirm('Al cambiar el estado, todos los estudiantes matriculados serán desmatriculados. ¿Deseas continuar?')) {
+          return;
+        }
+      }
       this.submitting = true;
       this.errors = {};
       try {

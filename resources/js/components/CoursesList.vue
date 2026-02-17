@@ -24,15 +24,21 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
+            <th>Estado</th>
             <th>Estudiantes</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="course in courses" :key="course.id">
+          <tr v-for="course in courses" :key="course.id" :class="{ 'row-inactive': course.status !== 'active' }">
             <td class="id-cell">{{ course.id }}</td>
             <td class="name-cell">{{ course.name }}</td>
             <td class="desc-cell">{{ course.description || '—' }}</td>
+            <td>
+              <span class="badge" :class="statusBadgeClass(course.status)">
+                {{ statusLabel(course.status) }}
+              </span>
+            </td>
             <td class="count-cell">
               <span class="badge">{{ course.students_count }}</span>
             </td>
@@ -70,6 +76,17 @@ export default {
     this.fetchCourses();
   },
   methods: {
+    statusBadgeClass(status) {
+      return {
+        'badge-active': status === 'active',
+        'badge-draft': status === 'draft',
+        'badge-archived': status === 'archived',
+      };
+    },
+    statusLabel(status) {
+      const labels = { active: 'Activo', draft: 'Borrador', archived: 'Archivado' };
+      return labels[status] || status;
+    },
     async fetchCourses() {
       this.loading = true;
       try {

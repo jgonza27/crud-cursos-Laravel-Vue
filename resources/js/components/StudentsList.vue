@@ -34,7 +34,8 @@
             <td class="name-cell">{{ student.name }}</td>
             <td class="email-cell">{{ student.email }}</td>
             <td class="course-cell">
-              <span class="badge badge-course">{{ student.course ? student.course.name : '—' }}</span>
+              <span v-if="student.course" class="badge badge-course">{{ student.course.name }}</span>
+              <span v-else class="badge badge-no-course">Sin curso</span>
             </td>
             <td class="actions-cell">
               <router-link :to="`/students/${student.id}/edit`" class="btn btn-sm btn-edit">
